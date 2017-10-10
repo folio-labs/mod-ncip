@@ -1,0 +1,14 @@
+{
+  "name": "ncip_endpoint",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node src/Server.js"
+  },
+  "dependencies": {
+    "body-parser": "latest",
+    "express": "latest",
+    "express-xml-bodyparser": "^0.3.0",
+    "minimist": "latest",
+    "request": "^2.83.0"
+  }
+}

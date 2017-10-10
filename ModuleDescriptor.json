@@ -1,0 +1,43 @@
+{
+  "id": "ncip-module",
+  "name": "ncip",
+  "provides": [
+    {
+      "id": "ncip",
+      "version": "0.1.0",
+      "handlers" : [
+        {
+            "methods" : [ "GET" ],
+            "pathPattern" : "/{message}",
+            "permissionsRequired" : [ "ncip.message.get" ]
+        },
+        {
+            "methods" : [ "POST" ],
+            "pathPattern" : "/{message}",
+            "permissionsRequired" : [ "ncip.message.post" ]
+        }
+      ]
+    }
+  ],
+  "permissionSets" : [
+    {
+      "permissionName" : "ncip.message.get",
+      "displayName" : "ncip message GET",
+      "description" : "GET request with NCIP message"
+    },
+    {
+      "permissionName" : "ncip.message.post",
+      "displayName" : "ncip message POST",
+      "description" : "POST request with NCIP message"
+    },
+    {
+      "permissionName" : "ncip.all",
+      "displayName" : "ncip all",
+      "description" : "All permissions for the NCIP module",
+      "subPermissions" : [
+        "ncip.message.get",
+        "ncip.message.post"
+      ]
+    }
+  ]
+}
