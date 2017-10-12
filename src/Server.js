@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var bodyParserXML = require('express-xml-bodyparser');
 var request = require('request');
 var builder = require('xmlbuilder');
+var parseString = require('xml2js').parseString;
 
 var port = 3000;
 
@@ -106,6 +107,8 @@ function getPatron(userId) {
   };
   var req = request(options, function(error, response, body) {
     if (!error && response.statusCode == 200) {
+      console.log("Fetch User " + userId);
+
       var user = JSON.parse(body);
       console.log('User Object: ');
       console.log(user);
@@ -167,12 +170,32 @@ router.get('/', function(req, res) {
   res.setHeader('Content-Type', 'text/xml');
 
   // Get Request Message
-  var ncipMessage = req.body;
-  console.log(ncipMessage);
+  var ncipMessage = Object.keys(req.query)[0];
+  console.log("NCIP Message Recieved: " + ncipMessage);
+  parseString(ncipMessage, function (err, result) {
+    console.dir(result);
 
-  var userid = '1534f418-f0e9-45ba-9361-dc3ed5a2fffd';
-  var xml = getPatron(userid);
-  res.send(xml);
+    if (result.ncipmessage.lookupuser) {
+      console.log("Lookup User");
+      var userid = '1534f418-f0e9-45ba-9361-dc3ed5a2fffd';
+      var xml = getPatron(userid);
+    } else if (result.ncipmessage.requestitem) {
+      var xml = renew(itemid, userid);  
+    } else if (result.ncipmessage.lookuprequest) {
+      var xml = renew(itemid, userid);  
+    } else if (result.ncipmessage.lookupitem) {
+      var xml = renew(itemid, userid);  
+    } else if (result.ncipmessage.renewitem) {
+      var xml = renew(itemid, userid);  
+    } else if (result.ncipmessage.cancelrequestitem) {
+      var xml = renew(itemid, userid);  
+    } else {
+      var xml = "<error>unknown request</error>";
+    }
+    res.send(xml);
+  
+  });
+  
 });
 
 app.use('/ncip', router);
